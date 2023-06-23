@@ -9,7 +9,7 @@ Whether you're planning a weekend getaway or embarking on a group adventure, Tri
 Key Features:
 - Expense Tracking: TripBuddy allows users to easily track and record travel expenses, including accommodation, transportation, meals, activities, and more.
   Users can add expenses with details such as the date, description, and amount spent.
-- Group Management: Users can create travel groups and invite friends to join. This feature enables seamless collaboration, as everyone in the group can contribute to and view the shared expenses.
+- Group Management: Users can create travel groups and invite friends to join. This feature enables seamless collaboration, as everyone in the group can contribute and view the shared expenses.
 - Equal Splitting: TripBuddy automatically calculates and divides expenses equally among group members. The app ensures that each traveler pays their fair share, eliminating the need for complex manual calculations. If there are costs for one user only (like a seconnd luggage) TripBuddy will add this specific cost to this one user only. No more unfair splits of single and group expenses.
 - Expense Categorization: Expenses can be categorized based on different spending types, making it convenient to view and analyze expenses in a structured manner. Common categories may include accommodation, transportation, food and entertainment.
 - Real-time Updates: The app provides real-time updates on expenses, allowing users to stay informed about the latest costs incurred. This feature helps travelers maintain transparency and avoids surprises at the end of the trip.

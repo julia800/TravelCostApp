@@ -1,58 +1,39 @@
 package com.example.travelcostapp
 
+import Trip
+import TripAdapter
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
-import com.example.travelcostapp.databinding.ActivityMainBinding
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var tripRecyclerView: RecyclerView
+    private lateinit var tripAdapter: TripAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        tripRecyclerView = findViewById(R.id.tripRecyclerView)
+        tripRecyclerView.layoutManager = LinearLayoutManager(this)
+        tripAdapter = TripAdapter(getDummyTrips())
+        tripRecyclerView.adapter = tripAdapter
 
-        setSupportActionBar(binding.toolbar)
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        val createTripButton = findViewById<View>(R.id.createTripButton)
+        createTripButton.setOnClickListener {
+            val intent = Intent(this, CreateTripActivity::class.java)
+            startActivity(intent)
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
+    private fun getDummyTrips(): List<Trip> {
+        // Create dummy trips for testing
+        val trip1 = Trip("1", "Trip 1", "Destination 1", "2023-06-01", "2023-06-05")
+        val trip2 = Trip("2", "Trip 2", "Destination 2", "2023-07-01", "2023-07-10")
+        val trip3 = Trip("3", "Trip 3", "Destination 3", "2023-08-01", "2023-08-15")
+        return listOf(trip1, trip2, trip3)
     }
 }

@@ -14,16 +14,27 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class TripListView : RecyclerView.Adapter<TripListView.TripViewHolder>() {
+    private var imageUri: Uri = Uri.withAppendedPath(Uri.parse(""), "")
 
     inner class TripViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
         private val image: ImageView = itemView.findViewById(R.id.imageView)
-        private val imageUriBase: Uri = Uri.parse("android.resource://com.example.travelcostapp/drawable/")
+        private val imageUriBase: Uri =
+            Uri.parse("android.resource://com.example.travelcostapp/drawable/")
 
         fun bind(trip: Trip) {
             nameTextView.text = trip.name
-            val imageUri = if(newTrips.isNotEmpty()) Uri.withAppendedPath(imageUriBase, trip.destination) else Uri.withAppendedPath(Uri.parse(""), "")
+            validateImg(trip.destination, trip)
             image.setImageURI(imageUri)
+        }
+
+        private fun validateImg(image: String, trip: Trip) {
+            if (newTrips.isNotEmpty())
+                if (image == "paris" || image == "rom")
+                    imageUri = Uri.withAppendedPath(imageUriBase, trip.destination)
+                else imageUri = Uri.withAppendedPath(imageUriBase, "default_image")
+            else
+                imageUri = Uri.withAppendedPath(Uri.parse(""), "")
         }
     }
 
@@ -38,12 +49,12 @@ class TripListView : RecyclerView.Adapter<TripListView.TripViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: TripViewHolder, position: Int) {
-        val trip = if (newTrips.isNotEmpty()) newTrips[position] else getDummyTrips()[position]
+        val trip = if (newTrips.isNotEmpty()) newTrips[position] else getEmptyList()[position]
         holder.bind(trip)
     }
 
     override fun getItemCount(): Int {
-        return if (newTrips.isNotEmpty()) newTrips.size else getDummyTrips().size
+        return if (newTrips.isNotEmpty()) newTrips.size else getEmptyList().size
     }
 
     private val valueEventListener = object : ValueEventListener {
@@ -54,14 +65,13 @@ class TripListView : RecyclerView.Adapter<TripListView.TripViewHolder>() {
                 newTrips.clear()
                 for ((_, tripData) in value) {
                     if (tripData is Map<*, *>) {
-
                         val name = tripData["name"] as? String
-                        val startDate = tripData["startDate"] as? String
-                        val endDate = tripData["endDate"] as? String
                         val destination = tripData["destination"] as? String
+                        val days = (tripData["days"] as? Long)?.toInt()
+                        val amountOfTravelers = (tripData["amountOfTravelers"] as? Long)?.toInt()
 
-                        if (name != null && startDate != null && endDate != null && destination != null) {
-                            val trip = Trip(name, destination, startDate, endDate)
+                        if (name != null && destination != null && days != null && amountOfTravelers != null) {
+                            val trip = Trip(name, destination, days , amountOfTravelers)
                             newTrips.add(trip)
                         }
                     }
@@ -77,9 +87,8 @@ class TripListView : RecyclerView.Adapter<TripListView.TripViewHolder>() {
         }
     }
 
-    private fun getDummyTrips(): List<Trip> {
-        val trip1 = Trip("", "", "", "")
-        return listOf(trip1)
+    private fun getEmptyList(): List<Trip> {
+        return listOf()
     }
 
     init {

@@ -31,13 +31,13 @@
         android:id="@+id/startDateEditText"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="Start Date" />
+        android:hint="Tage" />
 
     <EditText
         android:id="@+id/endDateEditText"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:hint="End Date" />
+        android:hint="Anzahl der Reisenden" />
 
     <Button
         android:id="@+id/createButton"

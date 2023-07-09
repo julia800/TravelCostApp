@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
+import com.example.travelcostapp.module.Trip
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class CreateTripActivity : AppCompatActivity() {
 
@@ -12,6 +15,7 @@ class CreateTripActivity : AppCompatActivity() {
     private lateinit var startDateEditText: EditText
     private lateinit var endDateEditText: EditText
     private lateinit var createButton: Button
+    private lateinit var database: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,16 +27,21 @@ class CreateTripActivity : AppCompatActivity() {
         endDateEditText = findViewById(R.id.endDateEditText)
         createButton = findViewById(R.id.createButton)
 
+        database = FirebaseDatabase.getInstance().getReference("trips")
+
         createButton.setOnClickListener {
             val name = nameEditText.text.toString()
             val destination = destinationEditText.text.toString()
             val startDate = startDateEditText.text.toString()
             val endDate = endDateEditText.text.toString()
 
-            // TODO: Save the trip details to database or perform desired action
-
-            // Finish the activity and go back to com.example.myapplication.MainActivity
+            createNewTrip(name, destination, startDate, endDate)
             finish()
         }
+    }
+
+    fun createNewTrip(name: String, destination: String, startDate: String, endDate: String) {
+        val user = Trip(name, destination, startDate,  endDate)
+        database.child(database.push().key!!).setValue(user)
     }
 }

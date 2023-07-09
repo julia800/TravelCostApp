@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "228545453684",
+    "firebase_url": "https://travelcostapp-c594a-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "travelcostapp-c594a",
+    "storage_bucket": "travelcostapp-c594a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228545453684:android:a7a3675e00a6ead0727b21",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228545453684-tg6edje9ol7sacgi29nm5o6fnvnn41ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI5XhCd-5RUPrAeTJ21x0J3lO6cXK8r2o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228545453684-tg6edje9ol7sacgi29nm5o6fnvnn41ij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228545453684:android:587922a9e304d640727b21",
+        "android_client_info": {
+          "package_name": "com.example.travelcostapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228545453684-tg6edje9ol7sacgi29nm5o6fnvnn41ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI5XhCd-5RUPrAeTJ21x0J3lO6cXK8r2o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228545453684-tg6edje9ol7sacgi29nm5o6fnvnn41ij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

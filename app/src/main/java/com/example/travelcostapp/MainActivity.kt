@@ -8,6 +8,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
     private lateinit var tripRecyclerView: RecyclerView
@@ -16,6 +17,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        println("Hello, World!") // Prints "Hello, World!" to the terminal
+
+        FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_main)
         toolbar = findViewById(R.id.toolbar)
         tripRecyclerView = findViewById(R.id.tripRecyclerView)

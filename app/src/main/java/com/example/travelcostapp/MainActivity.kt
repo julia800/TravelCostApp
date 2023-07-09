@@ -1,39 +1,32 @@
 package com.example.travelcostapp
 
-import Trip
-import TripAdapter
+import TripListView
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.Toolbar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var tripRecyclerView: RecyclerView
-    private lateinit var tripAdapter: TripAdapter
+    private lateinit var tripListView: TripListView
+    private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        toolbar = findViewById(R.id.toolbar)
         tripRecyclerView = findViewById(R.id.tripRecyclerView)
         tripRecyclerView.layoutManager = LinearLayoutManager(this)
-        tripAdapter = TripAdapter(getDummyTrips())
-        tripRecyclerView.adapter = tripAdapter
+        tripListView = TripListView()
+        tripRecyclerView.adapter = tripListView
 
         val createTripButton = findViewById<View>(R.id.createTripButton)
         createTripButton.setOnClickListener {
             val intent = Intent(this, CreateTripActivity::class.java)
             startActivity(intent)
         }
-    }
-
-    private fun getDummyTrips(): List<Trip> {
-        // Create dummy trips for testing
-        val trip1 = Trip("1", "Trip 1", "Destination 1", "2023-06-01", "2023-06-05")
-        val trip2 = Trip("2", "Trip 2", "Destination 2", "2023-07-01", "2023-07-10")
-        val trip3 = Trip("3", "Trip 3", "Destination 3", "2023-08-01", "2023-08-15")
-        return listOf(trip1, trip2, trip3)
     }
 }

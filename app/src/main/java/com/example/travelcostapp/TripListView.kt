@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelcostapp.R
+import com.example.travelcostapp.module.Travelers
 import com.example.travelcostapp.module.Trip
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -69,9 +70,10 @@ class TripListView : RecyclerView.Adapter<TripListView.TripViewHolder>() {
                         val destination = tripData["destination"] as? String
                         val days = (tripData["days"] as? Long)?.toInt()
                         val amountOfTravelers = (tripData["amountOfTravelers"] as? Long)?.toInt()
+                        val travelers = tripData["travelers"] as? Travelers
 
-                        if (name != null && destination != null && days != null && amountOfTravelers != null) {
-                            val trip = Trip(name, destination, days , amountOfTravelers)
+                        if (name != null && destination != null && days != null && amountOfTravelers != null && travelers != null) {
+                            val trip = Trip(name, destination, days , amountOfTravelers, listOf(travelers))
                             newTrips.add(trip)
                         }
                     }

@@ -1,10 +1,16 @@
 package com.example.travelcostapp
 
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
+import com.example.travelcostapp.module.Travelers
 import com.example.travelcostapp.module.Trip
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -17,6 +23,10 @@ class CreateTripActivity : AppCompatActivity() {
     private lateinit var amountOfTravelersEditText: EditText
     private lateinit var createButton: Button
     private lateinit var database: DatabaseReference
+    private lateinit var personNameLayout: LinearLayout
+    private lateinit var headline: TextView
+    private var personCount: Int = 0
+    private var input: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +36,17 @@ class CreateTripActivity : AppCompatActivity() {
         destinationEditText = findViewById(R.id.destinationEditText)
         daysEditText = findViewById(R.id.startDateEditText)
         amountOfTravelersEditText = findViewById(R.id.endDateEditText)
+        amountOfTravelersEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                input = s.toString()
+                addPersonEditTexts(getAmountOfTraveler(input))
+            }
+        })
+        personNameLayout = findViewById(R.id.personNameLayout)
+        headline = findViewById(R.id.headlineTextView)
         createButton = findViewById(R.id.createButton)
-
         database = FirebaseDatabase.getInstance().getReference("trips")
 
         createButton.setOnClickListener {
@@ -35,15 +54,46 @@ class CreateTripActivity : AppCompatActivity() {
             val destination = destinationEditText.text.toString()
             val days = daysEditText.text.toString()
             val amountOfTravelers = amountOfTravelersEditText.text.toString()
+            val travelers = listOf(Travelers("0", "2", ""))
 
-            if (validateInput(days, amountOfTravelers, name, destination)) {
-                createNewTrip(name, destination, days.toInt(), amountOfTravelers.toInt())
+            if (validateInput(days, amountOfTravelers, name, destination, travelers)) {
+                createNewTrip(name, destination, days.toInt(), amountOfTravelers.toInt(), travelers)
                 finish()
             }
         }
     }
 
-    private fun validateInput(days: String, amountOfTravelers: String, name: String, destination: String): Boolean {
+    private fun getAmountOfTraveler(amount: String): Int {
+        return if (amount.isEmpty())
+            0
+        else
+            amount.toInt()
+    }
+
+    private fun addPersonEditTexts(count: Int) {
+        val inflater = LayoutInflater.from(this)
+        personNameLayout.removeAllViews()
+
+        for (i in 0 until count) {
+            val personLayout = inflater.inflate(R.layout.item_person, null) as? LinearLayout
+            val personEditText = personLayout?.findViewById<EditText>(R.id.personEditText)
+            val lastNameEditText = personLayout?.findViewById<EditText>(R.id.lastNameEditText)
+
+            personEditText?.hint = "Firstname ${personCount + i + 1}"
+            lastNameEditText?.hint = "Lastname"
+
+            personNameLayout.addView(personLayout)
+        }
+        personCount = count
+    }
+
+    private fun validateInput(
+        days: String,
+        amountOfTravelers: String,
+        name: String,
+        destination: String,
+        travelers: List<Travelers>
+    ): Boolean {
 
         if (TextUtils.isEmpty(name)) {
             nameEditText.error = "* Pflichtfeld"
@@ -73,8 +123,14 @@ class CreateTripActivity : AppCompatActivity() {
         return pattern.matches(input)
     }
 
-    private fun createNewTrip(name: String, destination: String, days: Int, amountOfTravelers: Int) {
-        val user = Trip(name, destination, days, amountOfTravelers)
+    private fun createNewTrip(
+        name: String,
+        destination: String,
+        days: Int,
+        amountOfTravelers: Int,
+        travelers: List<Travelers>
+    ) {
+        val user = Trip(name, destination, days, amountOfTravelers, travelers)
         database.child(database.push().key!!).setValue(user)
     }
 }

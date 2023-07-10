@@ -4,5 +4,6 @@ data class Trip(
     val name: String,
     val destination: String,
     val days: Int,
-    val amountOfTravelers: Int
+    val amountOfTravelers: Int,
+    val travelers: List<Travelers>
 )

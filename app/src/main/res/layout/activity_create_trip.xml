@@ -39,6 +39,32 @@
         android:layout_height="48dp"
         android:hint="Anzahl der Reisenden" />
 
+
+    <TextView
+        android:id="@+id/headlineTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reisende"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:paddingBottom="16dp" />
+
+    <LinearLayout
+        android:id="@+id/personNameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- EditTexts for person names will be dynamically added here -->
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/personAgeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- EditTexts for person ages will be dynamically added here -->
+    </LinearLayout>
+
     <Button
         android:id="@+id/createButton"
         android:layout_width="match_parent"

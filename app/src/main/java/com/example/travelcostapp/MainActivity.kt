@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        println("Hello, World!") // Prints "Hello, World!" to the terminal
 
         FirebaseApp.initializeApp(this)
         setContentView(R.layout.activity_main)
@@ -30,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         val createTripButton = findViewById<View>(R.id.createTripButton)
         createTripButton.setOnClickListener {
             val intent = Intent(this, CreateTripActivity::class.java)
+        //    val intent = Intent(this, AddPersonsActivity::class.java)
             startActivity(intent)
         }
     }

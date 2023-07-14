@@ -131,7 +131,7 @@ class CreateTripActivity : AppCompatActivity() {
             travelersFirstNameEditText = personLayout?.findViewById<EditText>(R.id.personEditText)!!
             travelersLastNameEditText = personLayout.findViewById<EditText>(R.id.lastNameEditText)!!
 
-            travelersFirstNameEditText.hint = "Firstname ${personCount + i + 1}"
+            travelersFirstNameEditText.hint = "Firstname"
             travelersLastNameEditText.hint = "Lastname"
 
             personNameLayout.addView(personLayout)

@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.example.travelcostapp.module.Traveler
 import com.example.travelcostapp.module.Trip
 import com.google.firebase.database.DatabaseReference
@@ -26,6 +27,7 @@ class CreateTripActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var headline: TextView
     private var validatedName: Boolean = true
+    private lateinit var toolbar: Toolbar
 
     private var personCount: Int = 0
     private var input: String = ""
@@ -34,6 +36,13 @@ class CreateTripActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_trip)
 
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         nameEditText = findViewById(R.id.nameEditText)
         destinationEditText = findViewById(R.id.destinationEditText)
         daysEditText = findViewById(R.id.startDateEditText)

@@ -11,11 +11,11 @@ import com.example.travelcostapp.module.Trip
 import java.util.*
 
 class ImageListAdapter(context: Context, private val tripList: List<Trip>) :
-    ArrayAdapter<Trip>(context, R.layout.list_item, tripList) {
+    ArrayAdapter<Trip>(context, R.layout.image_list_item, tripList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val itemView = convertView ?: LayoutInflater.from(context)
-            .inflate(R.layout.list_item, parent, false)
+            .inflate(R.layout.image_list_item, parent, false)
 
         val trip = tripList[position]
 

@@ -157,7 +157,7 @@ class CreateTripActivity : AppCompatActivity() {
             return false
         }
 
-        if (TextUtils.isEmpty(amountOfTravelers) || !isNumeric(amountOfTravelers)) {
+        if (TextUtils.isEmpty(amountOfTravelers) || !isNumeric(amountOfTravelers) || amountOfTravelers == "0") {
             amountOfTravelersEditText.error = "Bitte geben Sie eine gültige Anzahl an Reisenden ein"
             return false
         }

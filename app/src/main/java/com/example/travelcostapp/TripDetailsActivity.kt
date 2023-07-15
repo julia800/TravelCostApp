@@ -10,11 +10,11 @@ import com.example.travelcostapp.module.Trip
 class TripDetailsActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var headline: TextView
-    private lateinit var textView: TextView
-    private lateinit var selected: TextView
+    private lateinit var affectedDropdown: TextView
+    private lateinit var payedDropdown : TextView
 
     private var trip: Trip? = null
-    var langArray = arrayOf("Java", "C++", "Kotlin", "C", "Python", "Javascript")
+    private var langArray = arrayOf("Java", "C++", "Kotlin", "C", "Python", "Javascript")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,12 +22,13 @@ class TripDetailsActivity : AppCompatActivity() {
 
         toolbar = findViewById(R.id.toolbar)
         headline = findViewById(R.id.headline)
-        textView = findViewById(R.id.textView);
-        selected = findViewById(R.id.selected)
+        affectedDropdown = findViewById(R.id.textView)
+        payedDropdown = findViewById(R.id.payedDropDown)
 
         addToolbar()
         addHeadline()
-        addDropdown()
+        addAffectedDropdown()
+        addPayedDropdown()
     }
 
     private fun addToolbar() {
@@ -41,12 +42,17 @@ class TripDetailsActivity : AppCompatActivity() {
     private fun addHeadline() {
         trip = intent.getParcelableExtra<Trip>("trip")
         if (trip != null) {
+            val travelers = trip?.travelers
+
             headline.text = trip?.name
+            if (travelers != null) {
+                langArray = travelers.map { it.firstName }.toTypedArray()
+            }
         }
     }
 
-    private fun addDropdown() {
-        textView.setOnClickListener {
+    private fun addAffectedDropdown() {
+        affectedDropdown.setOnClickListener {
             val langList = mutableListOf<Int>()
             val selectedLanguage = BooleanArray(langArray.size)
 
@@ -70,8 +76,8 @@ class TripDetailsActivity : AppCompatActivity() {
                         stringBuilder.append(", ")
                     }
                 }
-                textView.text = stringBuilder.toString()
-                selected.text = stringBuilder.toString()
+                affectedDropdown.text = stringBuilder.toString()
+                //TODO: stringBuilder.toString() is List of result
             }
 
             builder.setNegativeButton("Cancel") { dialog, i ->
@@ -83,8 +89,35 @@ class TripDetailsActivity : AppCompatActivity() {
                     selectedLanguage[j] = false
                 }
                 langList.clear()
-                textView.text = ""
-                selected.text = ""
+                affectedDropdown.text = ""
+                //TODO: reset list of results
+            }
+
+            builder.show()
+        }
+    }
+
+    private fun addPayedDropdown() {
+        payedDropdown.setOnClickListener {
+            var selectedItem = -1
+
+            val builder = AlertDialog.Builder(this@TripDetailsActivity)
+            builder.setTitle("Wer hat gezahlt?")
+            builder.setCancelable(false)
+            builder.setSingleChoiceItems(langArray, selectedItem) { dialog, i ->
+                selectedItem = i
+            }
+
+            builder.setPositiveButton("OK") { dialog, i ->
+                if (selectedItem != -1) {
+                    val selectedLang = langArray[selectedItem]
+                    payedDropdown.text = selectedLang
+                    //TODO: selectedLang is String of result
+                }
+            }
+
+            builder.setNegativeButton("Cancel") { dialog, i ->
+                dialog.dismiss()
             }
 
             builder.show()

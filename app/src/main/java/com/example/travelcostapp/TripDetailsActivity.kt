@@ -1,18 +1,20 @@
 package com.example.travelcostapp
 
+import android.app.AlertDialog
 import android.os.Bundle
-import android.widget.*
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.travelcostapp.module.Trip
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 
 class TripDetailsActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var headline: TextView
+    private lateinit var textView: TextView
     private lateinit var selected: TextView
+
     private var trip: Trip? = null
+    var langArray = arrayOf("Java", "C++", "Kotlin", "C", "Python", "Javascript")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +22,7 @@ class TripDetailsActivity : AppCompatActivity() {
 
         toolbar = findViewById(R.id.toolbar)
         headline = findViewById(R.id.headline)
+        textView = findViewById(R.id.textView);
         selected = findViewById(R.id.selected)
 
         addToolbar()
@@ -43,28 +46,48 @@ class TripDetailsActivity : AppCompatActivity() {
     }
 
     private fun addDropdown() {
-        val items = listOf("Material", "Detail", "Components", "Android")
-        val autoComplete: AutoCompleteTextView = findViewById(R.id.auto_complete)
-        val adapter = ArrayAdapter(this, R.layout.item_list, items)
-        autoComplete.setAdapter(adapter)
+        textView.setOnClickListener {
+            val langList = mutableListOf<Int>()
+            val selectedLanguage = BooleanArray(langArray.size)
 
-        val chipGroup: ChipGroup = findViewById(R.id.chip_group)
-        val selectedItems = mutableSetOf<String>()
-
-        autoComplete.setOnItemClickListener { _, _, position, _ ->
-            val selectedItem = adapter.getItem(position)
-            if (selectedItem != null && !selectedItems.contains(selectedItem)) {
-                selectedItems.add(selectedItem)
-                val chip = Chip(this)
-                chip.text = selectedItem
-                chip.isCloseIconVisible = true
-                chip.setOnCloseIconClickListener {
-                    selectedItems.remove(selectedItem)
-                    chipGroup.removeView(chip)
+            val builder = AlertDialog.Builder(this@TripDetailsActivity)
+            builder.setTitle("Wer ist von den Kosten betroffen?")
+            builder.setCancelable(false)
+            builder.setMultiChoiceItems(langArray, selectedLanguage) { dialog, i, b ->
+                if (b) {
+                    langList.add(i)
+                    langList.sort()
+                } else {
+                    langList.remove(i)
                 }
-                chipGroup.addView(chip)
-                autoComplete.text = null
             }
+
+            builder.setPositiveButton("OK") { dialog, i ->
+                val stringBuilder = StringBuilder()
+                for (j in langList.indices) {
+                    stringBuilder.append(langArray[langList[j]])
+                    if (j != langList.size - 1) {
+                        stringBuilder.append(", ")
+                    }
+                }
+                textView.text = stringBuilder.toString()
+                selected.text = stringBuilder.toString()
+            }
+
+            builder.setNegativeButton("Cancel") { dialog, i ->
+                dialog.dismiss()
+            }
+
+            builder.setNeutralButton("Clear All") { dialog, i ->
+                for (j in selectedLanguage.indices) {
+                    selectedLanguage[j] = false
+                }
+                langList.clear()
+                textView.text = ""
+                selected.text = ""
+            }
+
+            builder.show()
         }
     }
 }

@@ -48,6 +48,26 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/subHeadline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="Ausgabe hinzufügen"
+                android:textSize="24sp"
+                />
+
+            <TextView
+                android:id="@+id/typeOfExpense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:drawableRight="@android:drawable/arrow_down_float"
+                android:drawablePadding="16dp"
+                android:hint="Art der Ausgabe"
+                android:padding="12dp" />
+
+            <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,6 +87,24 @@
                 android:hint="Wer hat gezahlt?"
                 android:padding="12dp" />
 
+            <EditText
+                android:id="@+id/amountPayed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/editbox_background"
+                android:drawablePadding="16dp"
+                android:hint="Betrag"
+                android:layout_row="1"
+                android:imeOptions="actionNext"
+                android:inputType="numberDecimal"
+                android:padding="12dp" />
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Speichern" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

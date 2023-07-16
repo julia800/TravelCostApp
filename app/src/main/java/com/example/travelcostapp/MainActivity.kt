@@ -2,6 +2,7 @@ package com.example.travelcostapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var listView: ListView
     private lateinit var database: DatabaseReference
     private lateinit var tripList: MutableList<Trip>
+    private var mapOfTrips: MutableMap<String, Trip> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         FirebaseApp.initializeApp(this)
@@ -37,7 +39,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            openTripDetails(tripList[position])
+            val tripKey = mapOfTrips.keys.elementAt(position)
+            val trip = mapOfTrips[tripKey]
+            if (trip != null) {
+                openTripDetails(tripKey, trip)
+            } else {
+                Log.e("MainActivity", "Trip not found in list")
+            }
         }
     }
 
@@ -52,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                     val trip = tripSnapshot.getValue(Trip::class.java)
                     trip?.let {
                         tripList.add(it)
+                        mapOfTrips.put(tripSnapshot.key.toString(), it)
                     }
                 }
                 imgAdapter.notifyDataSetChanged()
@@ -63,8 +72,9 @@ class MainActivity : AppCompatActivity() {
         database.addValueEventListener(tripListener)
     }
 
-    private fun openTripDetails(trip: Trip) {
+    private fun openTripDetails(tripKey: String, trip: Trip) {
         val intent = Intent(this, TripDetailsActivity::class.java)
+        intent.putExtra("tripKey", tripKey)
         intent.putExtra("trip", trip)
         startActivity(intent)
     }

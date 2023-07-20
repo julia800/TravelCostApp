@@ -2,6 +2,7 @@ package com.example.travelcostapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var listView: ListView
     private lateinit var database: DatabaseReference
+    private lateinit var tripList: MutableList<Trip>
+    private var mapOfTrips: MutableMap<String, Trip> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         FirebaseApp.initializeApp(this)
@@ -26,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         toolbar = findViewById(id.toolbar)
 
         listView = findViewById(id.listView)
+        tripList = mutableListOf()
         createListView()
 
         val createTripButton = findViewById<View>(id.createTripButton)
@@ -33,10 +37,19 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CreateTripActivity::class.java)
             startActivity(intent)
         }
+
+        listView.setOnItemClickListener { parent, view, position, id ->
+            val tripKey = mapOfTrips.keys.elementAt(position)
+            val trip = mapOfTrips[tripKey]
+            if (trip != null) {
+                openTripDetails(tripKey, trip)
+            } else {
+                Log.e("MainActivity", "Trip not found in list")
+            }
+        }
     }
 
     private fun createListView() {
-        val tripList = mutableListOf<Trip>()
         val imgAdapter = ImageListAdapter(this, tripList)
         listView.adapter = imgAdapter
 
@@ -47,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                     val trip = tripSnapshot.getValue(Trip::class.java)
                     trip?.let {
                         tripList.add(it)
+                        mapOfTrips.put(tripSnapshot.key.toString(), it)
                     }
                 }
                 imgAdapter.notifyDataSetChanged()
@@ -56,5 +70,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         database.addValueEventListener(tripListener)
+    }
+
+    private fun openTripDetails(tripKey: String, trip: Trip) {
+        val intent = Intent(this, TripDetailsActivity::class.java)
+        intent.putExtra("tripKey", tripKey)
+        intent.putExtra("trip", trip)
+        startActivity(intent)
     }
 }

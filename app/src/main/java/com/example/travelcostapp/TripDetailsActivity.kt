@@ -4,12 +4,17 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.example.travelcostapp.module.Expense
 import com.example.travelcostapp.module.Trip
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import java.text.NumberFormat
 
 class TripDetailsActivity : AppCompatActivity() {
@@ -21,6 +26,7 @@ class TripDetailsActivity : AppCompatActivity() {
     private lateinit var payedDropdown : TextView
     private lateinit var amountPayed : EditText
     private lateinit var saveButton : Button
+    private lateinit var database: DatabaseReference
 
     private var trip: Trip? = null
     private var tripKey: String? = null
@@ -48,11 +54,9 @@ class TripDetailsActivity : AppCompatActivity() {
             val personPayedExpense = payedDropdown.text.toString()
             val amount = amountPayed.text.toString()
             val tripId = tripKey.toString()
-/*
-            if (validateInput(days, amountOfTravelers, name, destination) && validatedName) {
-                createNewTrip(name, destination, days.toInt(), amountOfTravelers.toInt(), travelers)
-                finish()
-            }*/
+
+            createNewExpense(typeOfExpense, personsAffectedOfExpense, personPayedExpense, amount, tripId)
+            //TODO route to next page in pressed and worked
         }
 
         addToolbar()
@@ -194,7 +198,7 @@ class TripDetailsActivity : AppCompatActivity() {
                 if (s.toString() != current) {
                     amountPayed.removeTextChangedListener(this)
 
-                    val cleanString: String = s.replace("""[€,.]""".toRegex(), "")
+                    val cleanString: String = s.replace("""[$,.]""".toRegex(), "")
                     val parsed = cleanString.toDouble()
                     val formatted = NumberFormat.getCurrencyInstance().format((parsed / 100))
 
@@ -205,5 +209,21 @@ class TripDetailsActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun createNewExpense(typeOfExpense: String, personsAffectedOfExpense: String, personPayedExpense: String,
+                                 amount: String, tripId: String) {
+
+        var filteredExpense = amount.replace("""[$]""".toRegex(), "")
+        val expense = Expense(typeOfExpense, personsAffectedOfExpense, personPayedExpense, filteredExpense.toDouble(), tripId)
+
+
+        database = FirebaseDatabase.getInstance().getReference("Expenses")
+        database.child(database.push().key!!).setValue(expense)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Speicherung erfolgt", Toast.LENGTH_LONG).show()
+            }.addOnFailureListener {
+                Log.d("Fehler", "fehler: " + it.message)
+            }
     }
 }

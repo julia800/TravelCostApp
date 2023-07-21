@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.text.NumberFormat
 
-class TripDetailsActivity : AppCompatActivity() {
+class AddExpenseScreen : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var headline: TextView
     private lateinit var subHeadline: TextView
@@ -32,7 +32,7 @@ class TripDetailsActivity : AppCompatActivity() {
 
     private var trip: Trip? = null
     private var tripKey: String? = null
-    private var affectedPersonsArray = arrayOf("Person 1", "Person 2", "Person 3")
+    private var allTravelersArray = arrayOf("Person 1", "Person 2", "Person 3")
     private var typeOfExpenseList = arrayOf("Flug", "Unterkunft", "Mietwagen", "Benzin",
         "Verpflegung", "Versicherung", "Transportkosten", "Medizinische Kosten", "Visum",
         "Zollgebühren", "Aktivitäten", "Eintrittsgelder", "Trinkgelder", "Sonstige Ausgaben")
@@ -85,7 +85,7 @@ class TripDetailsActivity : AppCompatActivity() {
             travelers = trip!!.travelers
 
             headline.text = trip?.name
-            affectedPersonsArray = travelers.map { it.firstName + " " + it.lastName.first() +"." }.toTypedArray()
+            allTravelersArray = travelers.map { it.firstName + " " + it.lastName.first() +"." }.toTypedArray()
         }
     }
 
@@ -93,7 +93,7 @@ class TripDetailsActivity : AppCompatActivity() {
         typeOfExpense.setOnClickListener {
             var selectedItem = -1
 
-            val builder = AlertDialog.Builder(this@TripDetailsActivity)
+            val builder = AlertDialog.Builder(this@AddExpenseScreen)
             builder.setTitle("Art der Ausgabe")
             builder.setCancelable(false)
             builder.setSingleChoiceItems(typeOfExpenseList, selectedItem) { dialog, i ->
@@ -119,12 +119,12 @@ class TripDetailsActivity : AppCompatActivity() {
     private fun addPersonAffectedDropdown() {
         affectedDropdown.setOnClickListener {
             val langList = mutableListOf<Int>()
-            val selectedLanguage = BooleanArray(affectedPersonsArray.size)
+            val selectedLanguage = BooleanArray(allTravelersArray.size)
 
-            val builder = AlertDialog.Builder(this@TripDetailsActivity)
+            val builder = AlertDialog.Builder(this@AddExpenseScreen)
             builder.setTitle("Wer ist von den Kosten betroffen?")
             builder.setCancelable(false)
-            builder.setMultiChoiceItems(affectedPersonsArray, selectedLanguage) { dialog, i, b ->
+            builder.setMultiChoiceItems(allTravelersArray, selectedLanguage) { dialog, i, b ->
                 if (b) {
                     langList.add(i)
                     langList.sort()
@@ -136,7 +136,7 @@ class TripDetailsActivity : AppCompatActivity() {
             builder.setPositiveButton("OK") { dialog, i ->
                 val stringBuilder = StringBuilder()
                 for (j in langList.indices) {
-                    stringBuilder.append(affectedPersonsArray[langList[j]])
+                    stringBuilder.append(allTravelersArray[langList[j]])
                     if (j != langList.size - 1) {
                         stringBuilder.append(", ")
                     }
@@ -166,16 +166,16 @@ class TripDetailsActivity : AppCompatActivity() {
         payedDropdown.setOnClickListener {
             var selectedItem = -1
 
-            val builder = AlertDialog.Builder(this@TripDetailsActivity)
+            val builder = AlertDialog.Builder(this@AddExpenseScreen)
             builder.setTitle("Wer hat gezahlt?")
             builder.setCancelable(false)
-            builder.setSingleChoiceItems(affectedPersonsArray, selectedItem) { dialog, i ->
+            builder.setSingleChoiceItems(allTravelersArray, selectedItem) { dialog, i ->
                 selectedItem = i
             }
 
             builder.setPositiveButton("OK") { dialog, i ->
                 if (selectedItem != -1) {
-                    val selectedLang = affectedPersonsArray[selectedItem]
+                    val selectedLang = allTravelersArray[selectedItem]
                     payedDropdown.text = selectedLang
                     //TODO: selectedLang is String of result
                 }
@@ -216,8 +216,9 @@ class TripDetailsActivity : AppCompatActivity() {
         val filteredExpense = amount.replace("""[$]""".toRegex(), "")
 
         for(traveler in travelers) {
+            val amountOfAffectedTravelers = personsAffectedOfExpense.count { it == ',' } + 1
             val currentTraveler = traveler.firstName + " " + traveler.lastName.first() +"."
-            val amountPerPerson = filteredExpense.toDouble() / affectedPersonsArray.size
+            val amountPerPerson = filteredExpense.toDouble() / amountOfAffectedTravelers
 
             if (currentTraveler == personPayedExpense) {
                 val index = travelers.indexOf(traveler)

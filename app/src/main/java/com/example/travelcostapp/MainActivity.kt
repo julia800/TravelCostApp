@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openTripDetails(tripKey: String, trip: Trip) {
-        val intent = Intent(this, TripDetailsActivity::class.java)
+        val intent = Intent(this, AddExpenseScreen::class.java)
         intent.putExtra("tripKey", tripKey)
         intent.putExtra("trip", trip)
         startActivity(intent)

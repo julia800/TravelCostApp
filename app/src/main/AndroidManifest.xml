@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.travelcostapp.TripDetailsActivity"
+            android:name="com.example.travelcostapp.AddExpenseScreen"
             android:exported="true"
             android:theme="@style/Theme.TravelCostApp.NoActionBar">
             <intent-filter>

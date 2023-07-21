@@ -1,10 +1,12 @@
 package com.example.travelcostapp
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ListView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.travelcostapp.R.*
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tripList: MutableList<Trip>
     private var mapOfTrips: MutableMap<String, Trip> = mutableMapOf()
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         FirebaseApp.initializeApp(this)
 

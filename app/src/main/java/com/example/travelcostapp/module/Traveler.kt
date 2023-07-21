@@ -4,19 +4,19 @@ import android.os.Parcelable
 
 data class Traveler(
     val firstName: String,
-    val lastName: String
+    val lastName: String,
+    val expenses: List<SingleExpense>
 ) : Parcelable {
-
-    constructor() : this("", "")
-
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
-        parcel.readString()!!
+        parcel.readString()!!,
+        parcel.createTypedArrayList(SingleExpense.CREATOR)!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(firstName)
         parcel.writeString(lastName)
+        parcel.writeTypedList(expenses)
     }
 
     override fun describeContents(): Int {

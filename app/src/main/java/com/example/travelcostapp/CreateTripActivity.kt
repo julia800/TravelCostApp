@@ -115,7 +115,7 @@ class CreateTripActivity : AppCompatActivity() {
                 lastNameEditText.error = "* Pflichtfeld"
             } else {
                 validatedName = true
-                travelersList.add(Traveler(firstName, lastName))
+                travelersList.add(Traveler(firstName, lastName, listOf()))
             }
         }
         return travelersList

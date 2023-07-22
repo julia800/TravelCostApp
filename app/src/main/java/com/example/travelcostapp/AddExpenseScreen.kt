@@ -1,6 +1,7 @@
 package com.example.travelcostapp
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -28,7 +29,7 @@ class AddExpenseScreen : AppCompatActivity() {
     private lateinit var amountPayed : EditText
     private lateinit var saveButton : Button
     private lateinit var database: DatabaseReference
-    private lateinit var travelers: List<Traveler>
+    private var travelers: List<Traveler> = listOf()
 
     private var trip: Trip? = null
     private var tripKey: String? = null
@@ -50,6 +51,14 @@ class AddExpenseScreen : AppCompatActivity() {
         amountPayed = findViewById(R.id.amountPayed)
         saveButton = findViewById(R.id.saveButton)
 
+        addToolbar()
+        addHeadline()
+        addTypeOfExpenseDropdown()
+        addPersonAffectedDropdown()
+        addPersonPayedDropdown()
+        addAmountInputField()
+
+
         saveButton.setOnClickListener {
             val typeOfExpense = typeOfExpense.text.toString()
             val personsAffectedOfExpense = affectedDropdown.text.toString()
@@ -58,22 +67,17 @@ class AddExpenseScreen : AppCompatActivity() {
             val tripId = tripKey.toString()
 
             createNewExpense(typeOfExpense, personsAffectedOfExpense, personPayedExpense, amount, tripId)
-            //TODO route to next page in pressed and worked
+            val intent = Intent(this, TripDetailScreen::class.java)
+            startActivity(intent)
         }
-
-        addToolbar()
-        addHeadline()
-        addTypeOfExpenseDropdown()
-        addPersonAffectedDropdown()
-        addPersonPayedDropdown()
-        addAmountInputField()
     }
 
     private fun addToolbar() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            val intent = Intent(this, TripDetailScreen::class.java)
+            startActivity(intent)
         }
     }
 
@@ -104,7 +108,6 @@ class AddExpenseScreen : AppCompatActivity() {
                 if (selectedItem != -1) {
                     val selectedLang = typeOfExpenseList[selectedItem]
                     typeOfExpense.text = selectedLang
-                    //TODO: selectedLang is String of result
                 }
             }
 
@@ -142,7 +145,6 @@ class AddExpenseScreen : AppCompatActivity() {
                     }
                 }
                 affectedDropdown.text = stringBuilder.toString()
-                //TODO: stringBuilder.toString() is List of result
             }
 
             builder.setNegativeButton("Cancel") { dialog, i ->
@@ -155,7 +157,6 @@ class AddExpenseScreen : AppCompatActivity() {
                 }
                 langList.clear()
                 affectedDropdown.text = ""
-                //TODO: reset list of results
             }
 
             builder.show()
@@ -177,7 +178,6 @@ class AddExpenseScreen : AppCompatActivity() {
                 if (selectedItem != -1) {
                     val selectedLang = allTravelersArray[selectedItem]
                     payedDropdown.text = selectedLang
-                    //TODO: selectedLang is String of result
                 }
             }
 

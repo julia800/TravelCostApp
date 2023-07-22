@@ -26,9 +26,9 @@ class ImageListAdapter(context: Context, private val tripList: List<Trip>) :
 
         val destination =  trip.destination.lowercase(Locale.ROOT)
         when {
-            destination == "paris" -> imageView.setImageResource(R.drawable.rom)
-            destination == "London" -> imageView.setImageResource(R.drawable.rom)
-            else -> imageView.setImageResource(R.drawable.rom)
+            destination == "rom" -> imageView.setImageResource(R.drawable.rom)
+            destination == "paris" -> imageView.setImageResource(R.drawable.paris)
+            else -> imageView.setImageResource(R.drawable.default_image)
         }
 
         return itemView

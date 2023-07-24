@@ -1,4 +1,5 @@
 package com.example.travelcostapp.module
+
 import android.os.Parcel
 import android.os.Parcelable
 
@@ -7,6 +8,9 @@ data class Traveler(
     val lastName: String,
     val expenses: List<SingleExpense>
 ) : Parcelable {
+
+    constructor() : this("", "", emptyList())
+
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,

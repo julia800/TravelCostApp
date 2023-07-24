@@ -23,20 +23,22 @@ class AddExpenseScreen : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var headline: TextView
     private lateinit var subHeadline: TextView
-    private lateinit var typeOfExpense : TextView
+    private lateinit var typeOfExpense: TextView
     private lateinit var affectedDropdown: TextView
-    private lateinit var payedDropdown : TextView
-    private lateinit var amountPayed : EditText
-    private lateinit var saveButton : Button
+    private lateinit var payedDropdown: TextView
+    private lateinit var amountPayed: EditText
+    private lateinit var saveButton: Button
     private lateinit var database: DatabaseReference
     private var travelers: List<Traveler> = listOf()
 
     private var trip: Trip? = null
     private var tripKey: String? = null
     private var allTravelersArray = arrayOf("Person 1", "Person 2", "Person 3")
-    private var typeOfExpenseList = arrayOf("Flug", "Unterkunft", "Mietwagen", "Benzin",
+    private var typeOfExpenseList = arrayOf(
+        "Flug", "Unterkunft", "Mietwagen", "Benzin",
         "Verpflegung", "Versicherung", "Transportkosten", "Medizinische Kosten", "Visum",
-        "Zollgebühren", "Aktivitäten", "Eintrittsgelder", "Trinkgelder", "Sonstige Ausgaben")
+        "Zollgebühren", "Aktivitäten", "Eintrittsgelder", "Trinkgelder", "Sonstige Ausgaben"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +67,13 @@ class AddExpenseScreen : AppCompatActivity() {
             val amount = amountPayed.text.toString()
             val tripId = tripKey.toString()
 
-            createNewExpense(typeOfExpense, personsAffectedOfExpense, personPayedExpense, amount, tripId)
+            createNewExpense(
+                typeOfExpense,
+                personsAffectedOfExpense,
+                personPayedExpense,
+                amount,
+                tripId
+            )
             val intent = Intent(this, TripDetailScreen::class.java)
             intent.putExtra("tripKey", tripKey)
             intent.putExtra("trip", trip)
@@ -92,7 +100,8 @@ class AddExpenseScreen : AppCompatActivity() {
             travelers = trip!!.travelers
 
             headline.text = trip?.name
-            allTravelersArray = travelers.map { it.firstName + " " + it.lastName.first() +"." }.toTypedArray()
+            allTravelersArray =
+                travelers.map { it.firstName + " " + it.lastName.first() + "." }.toTypedArray()
         }
     }
 
@@ -150,11 +159,11 @@ class AddExpenseScreen : AppCompatActivity() {
                 affectedDropdown.text = stringBuilder.toString()
             }
 
-            builder.setNegativeButton("Cancel") { dialog, i ->
+            builder.setNegativeButton("Abbrechen") { dialog, i ->
                 dialog.dismiss()
             }
 
-            builder.setNeutralButton("Clear All") { dialog, i ->
+            builder.setNeutralButton("Auswahl löschen") { dialog, i ->
                 for (j in selectedLanguage.indices) {
                     selectedLanguage[j] = false
                 }
@@ -184,7 +193,7 @@ class AddExpenseScreen : AppCompatActivity() {
                 }
             }
 
-            builder.setNegativeButton("Cancel") { dialog, i ->
+            builder.setNegativeButton("Abbrechen") { dialog, i ->
                 dialog.dismiss()
             }
 
@@ -194,7 +203,7 @@ class AddExpenseScreen : AppCompatActivity() {
 
     private fun addAmountInputField() {
         var current = ""
-        amountPayed.addTextChangedListener( object: TextWatcher {
+        amountPayed.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -214,13 +223,15 @@ class AddExpenseScreen : AppCompatActivity() {
         })
     }
 
-    private fun createNewExpense(typeOfExpense: String, personsAffectedOfExpense: String,
-                                 personPayedExpense: String, amount: String, tripId: String) {
+    private fun createNewExpense(
+        typeOfExpense: String, personsAffectedOfExpense: String,
+        personPayedExpense: String, amount: String, tripId: String
+    ) {
         val filteredExpense = amount.replace("""[$]""".toRegex(), "")
 
-        for(traveler in travelers) {
+        for (traveler in travelers) {
             val amountOfAffectedTravelers = personsAffectedOfExpense.count { it == ',' } + 1
-            val currentTraveler = traveler.firstName + " " + traveler.lastName.first() +"."
+            val currentTraveler = traveler.firstName + " " + traveler.lastName.first() + "."
             val amountPerPerson = filteredExpense.toDouble() / amountOfAffectedTravelers
 
             if (currentTraveler == personPayedExpense) {
@@ -229,17 +240,22 @@ class AddExpenseScreen : AppCompatActivity() {
             } else if (personsAffectedOfExpense.contains(currentTraveler)) {
                 val index = travelers.indexOf(traveler)
                 safeExpense(tripId, amountPerPerson, typeOfExpense, index, false)
-            }
-            else {
+            } else {
                 val index = travelers.indexOf(traveler)
                 safeExpense(tripId, 0.0, typeOfExpense, index, true)
             }
         }
     }
 
-    private fun safeExpense(tripId: String, amount: Double, typeOfExpense: String, indexOfTraveler: Int, payed: Boolean) {
+    private fun safeExpense(
+        tripId: String,
+        amount: Double,
+        typeOfExpense: String,
+        indexOfTraveler: Int,
+        payed: Boolean
+    ) {
         database = FirebaseDatabase.getInstance().getReference("Trips")
-        val selectedTrip =  database.child(tripId).child("travelers")
+        val selectedTrip = database.child(tripId).child("travelers")
 
         selectedTrip
             .child(indexOfTraveler.toString())

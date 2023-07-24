@@ -2,6 +2,7 @@ package com.example.travelcostapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
@@ -11,6 +12,10 @@ import com.example.travelcostapp.module.AllExpenses
 import com.example.travelcostapp.module.ExpensePerPerson
 import com.example.travelcostapp.module.Trip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -28,7 +33,6 @@ class TripDetailScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.trip_detail_screen)
 
-        trip = intent.getParcelableExtra<Trip>("trip")
         tripKey = intent.getStringExtra("tripKey")
 
         toolbar = findViewById(R.id.toolbar)
@@ -42,6 +46,25 @@ class TripDetailScreen : AppCompatActivity() {
         setupExpensesListView()
         setupAllExpensesListView()
         createAddButton()
+
+        val database = FirebaseDatabase.getInstance()
+        val tripRef = database.getReference("Trips").child(tripKey!!)
+
+        tripRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val trip = snapshot.getValue(Trip::class.java)
+
+                if (trip != null) {
+                    this@TripDetailScreen.trip = trip
+                    setupExpensesListView()
+                    setupAllExpensesListView()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("TripDetailScreen", "Data retrieval canceled: ${error.message}")
+            }
+        })
     }
 
     private fun addToolbar() {

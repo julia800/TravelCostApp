@@ -1,4 +1,5 @@
 package com.example.travelcostapp.module
+
 import android.os.Parcel
 import android.os.Parcelable
 

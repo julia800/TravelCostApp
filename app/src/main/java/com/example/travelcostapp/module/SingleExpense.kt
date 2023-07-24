@@ -12,6 +12,7 @@ data class SingleExpense(
 ) : Parcelable {
 
     constructor() : this(0.0, "", false)
+
     @RequiresApi(Build.VERSION_CODES.Q)
     constructor(parcel: Parcel) : this(
         parcel.readDouble(),

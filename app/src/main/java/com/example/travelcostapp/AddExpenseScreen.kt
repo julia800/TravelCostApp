@@ -17,8 +17,8 @@ import com.example.travelcostapp.module.Traveler
 import com.example.travelcostapp.module.Trip
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import java.text.NumberFormat
-
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 class AddExpenseScreen : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var headline: TextView
@@ -203,6 +203,12 @@ class AddExpenseScreen : AppCompatActivity() {
 
     private fun addAmountInputField() {
         var current = ""
+        val decimalFormatSymbols = DecimalFormatSymbols.getInstance().apply {
+            currencySymbol = "€"
+            groupingSeparator = '.'
+        }
+        val decimalFormat = DecimalFormat("#,##0.00", decimalFormatSymbols)
+
         amountPayed.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -210,9 +216,9 @@ class AddExpenseScreen : AppCompatActivity() {
                 if (s.toString() != current) {
                     amountPayed.removeTextChangedListener(this)
 
-                    val cleanString: String = s.replace("""[$,.]""".toRegex(), "")
-                    val parsed = cleanString.toDouble()
-                    val formatted = NumberFormat.getCurrencyInstance().format((parsed / 100))
+                    val cleanString: String = s.replace("""[€,.]""".toRegex(), "")
+                    val parsed = cleanString.toDouble() / 100 // Divide by 100 because we are working with cents
+                    val formatted = decimalFormat.format(parsed)
 
                     current = formatted
                     amountPayed.setText(formatted)

@@ -58,7 +58,6 @@ class AddExpenseScreen : AppCompatActivity() {
         addPersonPayedDropdown()
         addAmountInputField()
 
-
         saveButton.setOnClickListener {
             val typeOfExpense = typeOfExpense.text.toString()
             val personsAffectedOfExpense = affectedDropdown.text.toString()
@@ -68,6 +67,8 @@ class AddExpenseScreen : AppCompatActivity() {
 
             createNewExpense(typeOfExpense, personsAffectedOfExpense, personPayedExpense, amount, tripId)
             val intent = Intent(this, TripDetailScreen::class.java)
+            intent.putExtra("tripKey", tripKey)
+            intent.putExtra("trip", trip)
             startActivity(intent)
         }
     }
@@ -77,6 +78,8 @@ class AddExpenseScreen : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener {
             val intent = Intent(this, TripDetailScreen::class.java)
+            intent.putExtra("tripKey", tripKey)
+            intent.putExtra("trip", trip)
             startActivity(intent)
         }
     }

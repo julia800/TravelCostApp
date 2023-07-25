@@ -123,7 +123,7 @@ class AddExpenseScreen : AppCompatActivity() {
                 }
             }
 
-            builder.setNegativeButton("Cancel") { dialog, i ->
+            builder.setNegativeButton("Abbrechen") { dialog, i ->
                 dialog.dismiss()
             }
 

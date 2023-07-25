@@ -82,7 +82,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <!-- EditTexts for person names will be dynamically added here -->
             </LinearLayout>
 
             <LinearLayout
@@ -90,7 +89,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <!-- EditTexts for person ages will be dynamically added here -->
             </LinearLayout>
 
             <Button
